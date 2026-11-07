@@ -1,0 +1,506 @@
+<!DOCTYPE html><html lang="ar" dir="rtl"><head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>مختبر قوة الأحماض التفاعلي ثلاثي الأبعاد</title>
+<style>
+:root{--bg:#0c1220;--card:#151d30;--line:#26324d;--tx:#e8edf8;--mut:#93a0bd;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--tx);font-family:"Segoe UI",Tahoma,"Noto Naskh Arabic",Arial,sans-serif;line-height:1.5}
+header{padding:14px 16px;text-align:center;border-bottom:1px solid var(--line)}
+h1{margin:0;font-size:1.35rem}header p{margin:4px 0 0;color:var(--mut);font-size:.88rem}
+main{display:grid;gap:12px;padding:12px;max-width:1250px;margin:auto}
+.two{display:grid;gap:12px;grid-template-columns:1fr}
+@media(min-width:900px){.two{grid-template-columns:1fr 1fr}}
+.card{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:14px;overflow-x:auto}
+.card h2{margin:0 0 4px;font-size:1.15rem}
+.tag{display:inline-block;padding:2px 12px;border-radius:99px;font-weight:700;margin:2px 0 8px}
+.strong{background:#14532d;color:#86efac}.weak{background:#7c2d12;color:#fdba74}
+.eq{direction:ltr;text-align:center;font-size:1.25rem;font-weight:700;background:#0e1527;border-radius:10px;padding:8px;margin:4px 0}
+.unit,small{color:var(--mut);font-size:.85rem;font-weight:400}
+.big{font-size:2rem;font-weight:800;direction:ltr;text-align:right;line-height:1.1}
+input[type=range]{width:100%;margin:8px 0}
+.g{display:grid;grid-template-columns:1fr 1fr;gap:8px}
+.g>div{background:#0e1527;border-radius:10px;padding:8px 10px}
+.g b{display:block;font-size:1.5rem;direction:ltr;text-align:right}
+.cnt{display:flex;justify-content:space-between;align-items:center;border-top:1px solid var(--line);padding:6px 0;margin-top:2px}
+.cnt b{font-size:1.5rem;direction:ltr}
+.dot{display:inline-block;width:12px;height:12px;border-radius:50%;margin-left:6px}
+#stage{height:56vh;min-height:360px;max-height:600px;border-radius:14px;overflow:hidden;border:1px solid var(--line)}
+#stage canvas{display:block;width:100%;height:100%;touch-action:none}
+.bar{display:flex;flex-wrap:wrap;gap:8px;justify-content:center;margin-top:10px}
+button{background:#1f2b47;color:var(--tx);border:1px solid #34456e;border-radius:10px;padding:9px 14px;font:inherit;cursor:pointer}
+button:hover{background:#2a3a60}button.pri{background:#2563eb;border-color:#3b82f6}
+table{width:100%;border-collapse:collapse;text-align:center;min-width:520px}
+th,td{padding:8px 6px;border-bottom:1px solid var(--line)}th{color:var(--mut)}
+td{font-weight:700}td:first-child,th:first-child{text-align:right;color:var(--mut);font-weight:600}
+.ltr{direction:ltr;unicode-bidi:isolate}
+.note{color:var(--mut);font-size:.86rem;margin:8px 0 0}
+canvas.ch{width:100%;height:210px;display:block}
+ul{margin:6px 0 0;padding:0 20px;font-size:1.1rem;font-weight:700}
+/* ===== إضافة pH وpOH (معزولة بالبادئة phx-) ===== */
+#phx .phx-row{display:grid;gap:10px;grid-template-columns:1fr;margin:8px 0 4px}
+@media(min-width:700px){#phx .phx-row{grid-template-columns:1fr 1fr}}
+#phx label{display:block;color:var(--mut);font-size:.85rem;margin-bottom:4px}
+#phx select,#phx input{width:100%;padding:9px 10px;background:#0e1527;color:var(--tx);border:1px solid var(--line);border-radius:10px;font:inherit}
+#phx input:disabled{opacity:.7}
+#phx .phx-sc{background:#0e1527;border-radius:10px;padding:10px 12px 8px}
+#phx .phx-bar{position:relative;height:16px;border-radius:8px;direction:ltr;margin:30px 6px 6px}
+#phx .phx-a{background:linear-gradient(90deg,#ff5d6c,#4ade80 50%,#4fa3ff)}
+#phx .phx-b{background:linear-gradient(90deg,#4fa3ff,#4ade80 50%,#ff5d6c)}
+#phx .phx-mk{position:absolute;top:-7px;width:4px;height:30px;margin-left:-2px;border-radius:2px;background:#fff;box-shadow:0 0 0 2px #0c1220;transition:left .5s ease}
+#phx .phx-mk::before{content:attr(data-v);position:absolute;bottom:34px;left:50%;transform:translateX(-50%);background:#fff;color:#0c1220;font-weight:800;font-size:.8rem;border-radius:6px;padding:0 6px;white-space:nowrap}
+#phx .phx-tk,#phx .phx-lg{display:flex;justify-content:space-between;direction:ltr;font-size:.8rem;color:var(--mut)}
+#phx .phx-g{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-top:10px}
+#phx .phx-g>div{background:#0e1527;border-radius:10px;padding:8px 10px;overflow-wrap:anywhere}
+#phx .phx-g b{display:block;font-size:1.3rem;direction:ltr;text-align:right}
+#phx .phx-full{grid-column:1/-1}
+#phx .phx-t{display:inline-block;padding:2px 12px;border-radius:99px;font-weight:700}
+#phx .phx-ta{background:#7f1d1d;color:#fca5a5}#phx .phx-tn{background:#14532d;color:#86efac}#phx .phx-tb{background:#1e3a8a;color:#93c5fd}
+#phx .phx-err{color:#fca5a5}
+
+/* ===== إضافة درس التعادل (معزولة بالمعرّف viewNeut والبادئة nt) ===== */
+main[hidden]{display:none!important}
+#ntNav{padding:10px 12px 0;max-width:1250px;margin:auto}
+#viewNeut{--a:#4fa3ff;--ok:#4ade80;--bad:#ff5d6c;--b:#ffd166}
+#viewNeut .sub{color:var(--mut);font-size:.86rem;margin:8px 0 0}
+#viewNeut button.on{background:#2563eb;border-color:#3b82f6}
+#viewNeut select,#viewNeut input[type=number]{background:#0e1527;border:1px solid var(--line);border-radius:10px;padding:8px 10px;width:100%;color:var(--tx);font:inherit}
+#viewNeut .row{display:flex;flex-wrap:wrap;gap:8px;align-items:center}
+#viewNeut .grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:12px}
+#viewNeut .sp{font-size:1.05rem;direction:ltr}
+#viewNeut .ion{display:inline-block;direction:ltr;border-radius:999px;padding:6px 14px;margin:4px;cursor:pointer;font-weight:700;transition:all .6s;max-width:120px;overflow:hidden;white-space:nowrap}
+#viewNeut .ion.hid{opacity:0;transform:scale(.3);max-width:0;padding:6px 0;margin:4px 0;pointer-events:none}
+#viewNeut .pos{background:#2563eb}#viewNeut .neg{background:#ff5d6c;color:#1a0a0d}#viewNeut .wat{background:#2aa6a0}
+#viewNeut .ntStage{min-height:70px;background:#0e1527;border-radius:10px;padding:8px;text-align:center;margin:10px 0}
+#viewNeut .nteq{direction:ltr;text-align:center;font-size:1.1rem;line-height:2.2;font-weight:700;background:#0e1527;border-radius:10px;padding:8px;margin:4px 0}
+#viewNeut .nteq b{cursor:pointer;border-bottom:1px dashed var(--mut);padding:0 3px}
+#viewNeut .nteq b.sx{text-decoration:line-through;opacity:.4;transition:.5s}
+#viewNeut .info{background:#0e1527;border-right:4px solid var(--a);border-radius:8px;padding:10px;margin-top:10px;min-height:44px;color:var(--mut);font-size:.92rem}
+#viewNeut .info strong{color:var(--tx)}
+#viewNeut label{display:block;font-size:.85rem;color:var(--mut);margin-top:8px}
+#viewNeut .ro{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-top:10px}
+#viewNeut .ro div{background:#0e1527;border-radius:10px;padding:8px;text-align:center}
+#viewNeut .ro small{display:block}#viewNeut .ro span{font-size:1.1rem;font-weight:700}
+#viewNeut .badge{margin-top:10px;padding:8px;border-radius:10px;text-align:center;background:#0e1527;color:var(--mut);transition:.3s}
+#viewNeut .badge.eq1{background:var(--ok);color:#052e16;font-weight:700}#viewNeut .badge.over{background:var(--bad);color:#2a0606}
+#viewNeut svg{width:100%;max-width:340px;height:auto;display:block;margin:auto}
+#viewNeut canvas{width:100%;height:auto;background:#0e1527;border-radius:10px}
+#viewNeut .liq{transition:fill .5s}#viewNeut .vlv{transition:transform .3s;transform-origin:150px 240px}
+@keyframes ntfall{0%{transform:translateY(0);opacity:1}100%{transform:translateY(70px);opacity:.2}}
+#viewNeut .drop{animation:ntfall .45s ease-in forwards}
+#viewNeut .steps{background:#0e1527;border-radius:10px;padding:10px;margin-top:10px;font-size:.92rem}
+#viewNeut .steps p{margin:2px 0}#viewNeut .res{color:var(--ok);font-weight:700}
+</style>
+</head>
+<body>
+<header><h1>مختبر قوة الأحماض التفاعلي: HNO₃ مقابل HF</h1><p>تجربة افتراضية بالكامل — لا تُستخدم أي مواد كيميائية حقيقية</p></header>
+<nav id="ntNav" class="bar"><button id="ntTabA" class="pri">قوة الأحماض</button><button id="ntTabN">التعادل</button></nav>
+<main id="viewAcids">
+<section class="card" id="phx">
+<h2>pH وpOH</h2>
+<div class="phx-row">
+<div><label for="phx-sel">المحلول</label><select id="phx-sel">
+<option value="A">HNO₃ — حمض قوي (مرتبط بالمحاكاة)</option>
+<option value="B">HF — حمض ضعيف (مرتبط بالمحاكاة)</option>
+<option value="hcl">HCl — حمض قوي</option>
+<option value="ace">CH₃COOH — حمض ضعيف</option>
+<option value="naoh">NaOH — قاعدة قوية</option>
+<option value="h2o">H₂O — ماء نقي</option></select></div>
+<div><label for="phx-c">التركيز <span class="ltr">(mol/L)</span></label><input id="phx-c" type="number" min="0.000001" max="1" step="any" value="0.001" disabled=""></div>
+</div>
+<p class="note" id="phx-src">التركيز مأخوذ من شريط تركيز HNO₃ في المحاكاة أدناه؛ غيّره هناك ويتحدث هذا القسم تلقائيًا.</p><p class="note phx-err" id="phx-e"></p>
+<div class="two">
+<div class="phx-sc"><b>مقياس pH</b><div class="phx-bar phx-a"><div class="phx-mk" id="phx-mh" data-v="0.30" style="left: 2.150369%;"></div></div>
+<div class="phx-tk"><span>0</span><span>7</span><span>14</span></div><div class="phx-lg"><span>حمضي</span><span>متعادل</span><span>قاعدي</span></div>
+<p class="note" id="phx-dh"><span class="ltr">pH = 0.30</span> أقل من 7: حمضي</p></div>
+<div class="phx-sc"><b>مقياس pOH</b><div class="phx-bar phx-b"><div class="phx-mk" id="phx-mo" data-v="13.70" style="left: 97.849631%;"></div></div>
+<div class="phx-tk"><span>0</span><span>7</span><span>14</span></div><div class="phx-lg"><span>قاعدي (أقل من 7)</span><span>متعادل</span><span>حمضي (أكبر من 7)</span></div>
+<p class="note" id="phx-do"><span class="ltr">pOH = 13.70</span> أكبر من 7: حمضي</p></div>
+</div>
+<div class="phx-g">
+<div><small>pH</small><b id="phx-vh">0.30</b></div><div><small>pOH</small><b id="phx-vo">13.70</b></div>
+<div><small><span class="ltr">[H₃O⁺]</span> <span class="ltr">mol/L</span></small><b id="phx-h">5.00×10⁻¹</b></div><div><small><span class="ltr">[OH⁻]</span> <span class="ltr">mol/L</span></small><b id="phx-oh">2.00×10⁻¹⁴</b></div>
+<div class="phx-full"><small>تصنيف المحلول</small><br><span class="phx-t phx-ta" id="phx-k">حمضي</span> <span class="note" id="phx-n">نسبة التأين ≈ <span class="ltr">99.99%</span></span></div>
+</div>
+<p class="note ltr" style="text-align:center">pH = −log₁₀[H₃O⁺] &nbsp;|&nbsp; pOH = −log₁₀[OH⁻] &nbsp;|&nbsp; pH + pOH = 14 &nbsp;|&nbsp; 25°C</p>
+<p class="note">الحسابات تقريبية لمحاليل مائية مثالية عند <span class="ltr">25°C</span>. ثوابت <span class="ltr">HNO₃</span> و<span class="ltr">HF</span> هي نفسها المستخدمة في المحاكاة أدناه، وثابت حمض الأسيتيك <span class="ltr">Ka = 1.8×10⁻⁵</span>.</p>
+</section>
+<section>
+<div id="stage"></div>
+<div class="bar">
+<button id="go" class="pri">إيقاف التجربة</button>
+<button id="uni">توحيد التركيز</button>
+<button id="rs">إعادة الضبط</button>
+<button id="rot">تدوير تلقائي: يعمل</button>
+<button id="pz">إيقاف الحركة</button>
+<button id="zi">تقريب +</button><button id="zo">تبعيد −</button>
+</div>
+<p class="note">اسحب للتدوير، وعجلة الفأرة أو القرصان للتقريب. الكرات تمثيل بصري مبسط (كل 0.005 mol/L ≈ كرة واحدة) وليست العدد الحقيقي للجسيمات. الدائرة الكهربائية مغلقة افتراضيًا (اضغط «إيقاف التجربة» لفتحها وإطفاء المصباحين)؛ وعند إغلاقها تتجه أيونات H₃O⁺ نحو القطب السالب والأيونات السالبة نحو القطب الموجب، وتضيء المصابيح بحسب التوصيلية.</p>
+<p class="note"><span class="dot" style="background:#4fa3ff"></span>HNO₃ غير متأين <span class="dot" style="background:#ffd166"></span>HF غير متأين <span class="dot" style="background:#ff5d6c"></span>H₃O⁺ <span class="dot" style="background:#4ade80"></span>NO₃⁻ <span class="dot" style="background:#c084fc"></span>F⁻</p>
+</section>
+<div class="two" id="cards"><section class="card"><h2>حمض النيتريك <span class="ltr">HNO₃</span></h2><span class="tag strong">حمض قوي — تأين شبه تام</span>
+<div class="eq">HNO₃ + H₂O → H₃O⁺ + NO₃⁻</div><div class="unit">المقصود: التأين في الماء — نوع التفاعل: تأين شبه تام</div>
+<div class="big"><span id="c_A">0.50</span> <span class="unit">mol/L</span></div>
+<input type="range" id="s_A" min="0.05" max="1" step="0.01" aria-label="تركيز HNO₃">
+<div class="g"><div><small>درجة التأين α</small><b id="al_A">≈ 1.0000</b></div><div><small>النسبة المئوية = α × 100</small><b id="pc_A">≈99.99%</b></div><div><small>pH</small><b id="ph_A">0.30</b></div><div><small>التوصيلية (mS/cm)</small><b id="kp_A">179.0</b></div></div>
+<div class="cnt" style="margin-top:8px"><span>سطوع المصباح (من التوصيلية)</span><b id="br_A">89%</b></div>
+<div class="cnt"><span><i class="dot" style="background:#4fa3ff"></i>جزيئات HNO₃ غير المتأينة</span><b id="m_A">0</b></div>
+<div class="cnt"><span><i class="dot" style="background:#ff5d6c"></i>أيونات H₃O⁺</span><b id="h_A">100</b></div>
+<div class="cnt"><span><i class="dot" style="background:#4ade80"></i>أيونات <span class="ltr">NO₃⁻</span></span><b id="n_A">100</b></div></section><section class="card"><h2>حمض الهيدروفلوريك <span class="ltr">HF</span></h2><span class="tag weak">حمض ضعيف — تأين جزئي واتزان كيميائي</span>
+<div class="eq">HF + H₂O ⇌ H₃O⁺ + F⁻</div><div class="unit">المقصود: التأين في الماء — نوع التفاعل: تأين جزئي</div>
+<div class="big"><span id="c_B">0.50</span> <span class="unit">mol/L</span></div>
+<input type="range" id="s_B" min="0.05" max="1" step="0.01" aria-label="تركيز HF">
+<div class="g"><div><small>درجة التأين α</small><b id="al_B">0.0362</b></div><div><small>النسبة المئوية = α × 100</small><b id="pc_B">3.62%</b></div><div><small>pH</small><b id="ph_B">1.74</b></div><div><small>التوصيلية (mS/cm)</small><b id="kp_B">7.1</b></div></div>
+<div class="cnt" style="margin-top:8px"><span>سطوع المصباح (من التوصيلية)</span><b id="br_B">36%</b></div>
+<div class="cnt"><span><i class="dot" style="background:#ffd166"></i>جزيئات HF غير المتأينة</span><b id="m_B">96</b></div>
+<div class="cnt"><span><i class="dot" style="background:#ff5d6c"></i>أيونات H₃O⁺</span><b id="h_B">4</b></div>
+<div class="cnt"><span><i class="dot" style="background:#c084fc"></i>أيونات <span class="ltr">F⁻</span></span><b id="n_B">4</b></div></section></div>
+<section class="card"><h2>لوحة المقارنة</h2><table id="tb"><tbody><tr><th></th><th>HNO₃</th><th>HF</th></tr><tr><td>الصيغة الكيميائية</td><td>حمض النيتريك (HNO₃)</td><td>حمض الهيدروفلوريك (HF)</td></tr><tr><td>التركيز</td><td>0.50 mol/L</td><td>0.50 mol/L</td></tr><tr><td>قوة الحمض</td><td>قوي</td><td>ضعيف</td></tr><tr><td>المعادلة</td><td><span class="ltr">HNO₃ + H₂O → H₃O⁺ + NO₃⁻</span></td><td><span class="ltr">HF + H₂O ⇌ H₃O⁺ + F⁻</span></td></tr><tr><td>نوع التفاعل</td><td>تأين شبه تام</td><td>تأين جزئي</td></tr><tr><td>درجة التأين α</td><td>≈ 1.0000</td><td>0.0362</td></tr><tr><td>نسبة التأين</td><td>≈99.99%</td><td>3.62%</td></tr><tr><td>جزيئات غير متأينة (عينة)</td><td>0</td><td>96</td></tr><tr><td>أيونات موجبة H₃O⁺ (عينة)</td><td>100</td><td>4</td></tr><tr><td>أيونات سالبة (عينة)</td><td>100 NO₃⁻</td><td>4 F⁻</td></tr><tr><td>pH</td><td>0.30</td><td>1.74</td></tr><tr><td>التوصيلية</td><td>179.0 mS/cm</td><td>7.1 mS/cm</td></tr><tr><td>سطوع المصباح</td><td>89%</td><td>36%</td></tr><tr><td>أيونات H₃O⁺ الفعلية في 100 mL</td><td>3.01×10²²</td><td>1.09×10²¹</td></tr></tbody></table>
+<p class="note">عند التركيز نفسه، يوصل الحمض القوي الكهرباء أفضل من الضعيف لأن تركيز الأيونات فيه أعلى كثيرًا؛ وتؤثر أيضًا حركية الأيونات (H₃O⁺ الأسرع ثم NO₃⁻ ثم F⁻).</p></section>
+<div class="two">
+<section class="card"><h2>نسبة التأين % مقابل التركيز</h2><canvas class="ch" id="ch1" width="1158" height="630"></canvas><p class="note">أزرق: HNO₃ ، برتقالي: HF. تزداد نسبة تأين HF عند التخفيف، لكنه يبقى ضعيفًا.</p></section>
+<section class="card"><h2>التوصيلية (mS/cm) مقابل التركيز</h2><canvas class="ch" id="ch2" width="1158" height="630"></canvas><p class="note">النقاط تمثل التركيز الحالي لكل حمض.</p></section>
+</div>
+<section class="card"><h2>الأساس العلمي (نموذج تقريبي)</h2>
+<p class="note" style="margin-top:0">HA + H₂O ⇌ H₃O⁺ + A⁻ ، Ka = x²/(C − x) حيث x = [H₃O⁺]. للحمض HF نأخذ Ka = 6.8×10⁻⁴ ونحل المعادلة التربيعية x = (−Ka + √(Ka² + 4·Ka·C))/2 ، ثم α = x/C و pH = −log x. للحمض HNO₃ نستخدم Ka كبيرة جدًا (≈10⁴) فيظهر تأين شبه تام، وهذا تقريب. التوصيلية: κ = (λ(H₃O⁺) + λ(A⁻))·x / (1 + 0.25√x) بوحدة mS/cm مع λ(H₃O⁺)=349.8 و λ(NO₃⁻)=71.4 و λ(F⁻)=55.4 S·cm²/mol، والمقام تصحيح تقريبي لتجاذب الأيونات. نسبة التأين المئوية = α × 100. في النموذج المبسط كل جزيء يتأين ينتج H₃O⁺ واحدًا وأيونًا سالبًا واحدًا. pH ودرجة التأين خاصيتان مختلفتان.</p></section>
+<section class="card"><h2>إعداد الطالبات</h2><ul><li>سلمى حسن يوسف</li><li>نورة علي الزهراني</li><li>غنى سعيد الجدعاني</li></ul></section>
+</main>
+<main id="viewNeut" hidden>
+<section class="card" id="s1"><h2>١) مقدمة تفاعلية عن التعادل</h2>
+<div class="row"><button class="sp" id="bAcid">HCl</button><button class="sp" id="bBase">NaOH</button><button id="bMix">امزج ⟵</button><button id="bRst1">إعادة</button></div>
+<div class="ntStage" id="ntStage">
+<span class="ion pos hid" id="iH" data-info="H⁺|أيون الهيدروجين (H₃O⁺ في الماء). مصدر الصفة الحمضية، ينتج من تأين الحمض.">H⁺</span>
+<span class="ion neg hid" id="iCl" data-info="Cl⁻|أيون الكلوريد. أيون متفرج لا يشارك في التفاعل النهائي.">Cl⁻</span>
+<span class="ion pos hid" id="iNa" data-info="Na⁺|أيون الصوديوم. أيون متفرج لا يشارك في التفاعل النهائي.">Na⁺</span>
+<span class="ion neg hid" id="iOH" data-info="OH⁻|أيون الهيدروكسيد. مصدر الصفة القاعدية، ينتج من تفكك القاعدة.">OH⁻</span>
+<span class="ion wat hid" id="iW" data-info="H₂O|الماء: ناتج اتحاد H⁺ مع OH⁻ (تفاعل التعادل). متعادل pH = 7 عند 25°C.">H₂O</span>
+</div>
+<p class="sub" id="hint">اضغطي على الحمض أو القاعدة لترين أيوناتهما، ثم اضغطي «امزج».</p>
+<div class="nteq"><b data-info="HCl|حمض الهيدروكلوريك: حمض قوي يتأين كليًا في الماء إلى H⁺ و Cl⁻.">HCl</b> + <b data-info="NaOH|هيدروكسيد الصوديوم: قاعدة قوية تتفكك كليًا إلى Na⁺ و OH⁻.">NaOH</b> → <b data-info="NaCl|كلوريد الصوديوم: ملح ناتج عن التعادل، محلوله متعادل لأنه من حمض قوي وقاعدة قوية.">NaCl</b> + <b data-info="H₂O|الماء: ناتج التعادل الأساسي.">H₂O</b></div>
+<div class="info" id="info">اضغطي على أي مادة أو أيون لتظهر معلوماته هنا.</div></section>
+
+<section class="card" id="s2"><h2>٢) مختبر المعايرة</h2>
+<div class="grid"><div>
+<svg viewBox="0 0 300 430" id="lab" aria-label="مختبر المعايرة">
+<defs><clipPath id="fc"><path d="M130 290 L130 322 L88 392 Q84 408 102 408 L198 408 Q216 408 212 392 L170 322 L170 290 Z"/></clipPath>
+<clipPath id="bc"><rect x="140" y="30" width="20" height="200"/></clipPath></defs>
+<rect x="0" y="414" width="300" height="16" fill="#27517a"/><rect x="36" y="20" width="8" height="396" fill="#6b8299"/><rect x="20" y="410" width="60" height="8" rx="3" fill="#6b8299"/><rect x="36" y="110" width="104" height="7" fill="#6b8299"/>
+<rect x="140" y="30" width="20" height="200" fill="#ffffff14" stroke="#cfe3f5" stroke-width="2"/>
+<rect id="bl" class="liq" x="140" y="30" width="20" height="200" fill="#ffb86b" clip-path="url(#bc)"/>
+<g stroke="#cfe3f5" stroke-width="1">
+<path d="M160 50h-8M160 90h-8M160 130h-8M160 170h-8M160 210h-8"/></g>
+<rect class="vlv" id="vlv" x="120" y="236" width="60" height="8" rx="4" fill="#d4a017"/><circle cx="150" cy="240" r="6" fill="#b8860b"/>
+<path d="M146 244h8v14l-4 6-4-6z" fill="#cfe3f5"/>
+<g id="drops"></g>
+<path d="M130 290 L130 322 L88 392 Q84 408 102 408 L198 408 Q216 408 212 392 L170 322 L170 290 Z" fill="#ffffff10" stroke="#cfe3f5" stroke-width="2.5"/>
+<rect id="fl" class="liq" x="80" y="350" width="140" height="60" fill="#e1f0fa" clip-path="url(#fc)" style="transition:y .4s,height .4s,fill .5s"/>
+<rect x="126" y="282" width="48" height="8" rx="3" fill="#cfe3f5"/>
+<g transform="translate(236 310)"><rect x="0" y="0" width="10" height="70" rx="4" fill="#ffffff14" stroke="#cfe3f5"/><rect x="2" y="30" width="6" height="38" fill="#8fd3ff"/><path d="M5 70v14" stroke="#cfe3f5" stroke-width="2"/><text x="5" y="-6" font-size="12" fill="#9db8d1" text-anchor="middle">ماصة</text></g>
+<g transform="translate(262 330)"><rect x="0" y="12" width="14" height="40" rx="4" fill="#ffffff14" stroke="#cfe3f5"/><circle id="dc" cx="7" cy="8" r="7" fill="#e1f0fa" stroke="#cfe3f5"/><text x="7" y="-4" font-size="11" fill="#9db8d1" text-anchor="middle">دليل</text></g>
+<text x="190" y="140" font-size="12" fill="#9db8d1">سحاحة</text><text x="150" y="428" font-size="12" fill="#9db8d1" text-anchor="middle">دورق مخروطي</text>
+</svg></div>
+<div>
+<div class="row"><button id="bValve">افتح الصمام</button><button id="bDrop">قطرة +</button><button id="bRst2">إعادة التجربة</button></div>
+<label>نمط التدفق عند فتح الصمام</label><select id="mode"><option value="d">قطرة قطرة (0.05 mL)</option><option value="f">مستمر (سريع)</option></select>
+<label>إضافة حجم محدد: <b id="stepL">1.0</b> mL</label><div class="row"><input type="range" id="step" min="0.1" max="5" step="0.1" value="1" style="flex:1"><button id="bAdd">أضيفي</button></div>
+<label>الكاشف</label><div class="row" id="inds"></div>
+<div class="ro"><div><small>الحجم المضاف</small><span id="rV">0.00 mL</span></div><div><small>pH</small><span id="rP">–</span></div><div><small>لون المحلول</small><span id="rC">–</span></div><div><small>حالة المحلول</small><span id="rS">–</span></div></div>
+<div class="badge" id="bdg">—</div></div></div></section>
+
+<section class="card" id="s3"><h2>٣) لوحة التحكم في المحاليل</h2>
+<div class="grid"><div><label>الحمض في الدورق (مجهول التركيز)</label><select id="acid"><option value="0">HCl (قوي)</option><option value="1">HNO₃ (قوي)</option><option value="2">CH₃COOH (ضعيف)</option></select>
+<label>تركيز الحمض: <b id="maL"></b> mol/L</label><input type="range" id="ma" min="0.01" max="1" step="0.01" value="0.1">
+<label>حجم الحمض في الدورق: <b id="vaL"></b> mL</label><input type="range" id="va" min="10" max="50" step="1" value="25"></div>
+<div><label>القاعدة في السحاحة (معلومة التركيز)</label><select id="base"><option value="0">NaOH (قوية)</option><option value="1">KOH (قوية)</option><option value="2">NH₃ (ضعيفة)</option></select>
+<label>تركيز القاعدة: <b id="mbL"></b> mol/L</label><input type="range" id="mb" min="0.01" max="1" step="0.01" value="0.1">
+<div class="info" id="rel"></div></div></div>
+<p class="sub">قوة الحمض أو القاعدة تُحدَّد بنوعها فقط (ثابت Ka أو Kb ثابت)، وتغيير التركيز لا يغيّر نسبة التأين تلقائيًا.</p></section>
+
+<section class="card" id="s4"><h2>٤) الكواشف اللونية</h2><div class="grid" id="indTbl"></div></section>
+
+<section class="card" id="s5"><h2>٥) المعادلات الأيونية</h2>
+<div class="nteq"><div>المعادلة الأيونية الكاملة:</div>
+<b data-info="H⁺|يشارك في التفاعل: يتحد مع OH⁻ مكوّنًا الماء.">H⁺</b> + <b class="spc" data-info="Cl⁻|أيون متفرج: موجود قبل التفاعل وبعده دون تغيير.">Cl⁻</b> + <b class="spc" data-info="Na⁺|أيون متفرج: موجود قبل التفاعل وبعده دون تغيير.">Na⁺</b> + <b data-info="OH⁻|يشارك في التفاعل: يتحد مع H⁺ مكوّنًا الماء.">OH⁻</b> → <b class="spc" data-info="Na⁺|أيون متفرج.">Na⁺</b> + <b class="spc" data-info="Cl⁻|أيون متفرج.">Cl⁻</b> + <b data-info="H₂O|ناتج التعادل (جزيء ماء غير متأين).">H₂O</b>
+<div>المعادلة الأيونية النهائية:</div><div id="netEq" style="opacity:.25;transition:.5s"><b data-info="H⁺|يتحد مع OH⁻.">H⁺</b> + <b data-info="OH⁻|يتحد مع H⁺.">OH⁻</b> → <b data-info="H₂O|الماء.">H₂O</b></div></div>
+<div class="row" style="justify-content:center"><button id="bSpec">احذفي الأيونات المتفرجة</button></div>
+<div class="info" id="info2">اضغطي على أي أيون لمعرفة دوره.</div></section>
+
+<section class="card" id="s6"><h2>٦) آلة حساب المعايرة</h2>
+<div class="grid"><div><label>المجهول المراد حسابه</label><select id="unk"><option value="vb">حجم القاعدة V_b</option><option value="mb">تركيز القاعدة M_b</option><option value="va">حجم الحمض V_a</option><option value="ma">تركيز الحمض M_a</option></select>
+<label>مولات الحمض في المعادلة (n_a)</label><input type="number" id="na" value="1" min="1" step="1">
+<label>مولات القاعدة في المعادلة (n_b)</label><input type="number" id="nb" value="1" min="1" step="1"></div>
+<div><label>M_a (mol/L)</label><input type="number" id="cMa" value="0.1" step="0.01" min="0"><label>V_a (mL)</label><input type="number" id="cVa" value="25" step="1" min="0">
+<label>M_b (mol/L)</label><input type="number" id="cMb" value="0.1" step="0.01" min="0"><label>V_b (mL)</label><input type="number" id="cVb" value="25" step="1" min="0"></div></div>
+<div class="steps" id="calc"></div></section>
+
+<section class="card" id="s7"><h2>٧) منحنى المعايرة</h2><canvas id="cv" width="640" height="340"></canvas>
+<p class="sub">المنطقة المظللة: التغير الحاد في pH قرب نقطة التكافؤ · الخط المتقطع: نقطة التكافؤ · الشريط الأفقي: مدى تغير لون الكاشف المختار.</p></section>
+</main>
+<script src="https://cdn.jsdelivr.net/npm/three@0.128.0/build/three.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/controls/OrbitControls.js"></script>
+<script>
+(function(){
+const $=id=>document.getElementById(id);
+const D={
+A:{name:"حمض النيتريك",f:"HNO₃",cls:"strong",st:"حمض قوي — تأين شبه تام",rx:"HNO₃ + H₂O → H₃O⁺ + NO₃⁻",type:"تأين شبه تام",an:"NO₃⁻",lam:71.4,Ka:1e4,mc:"#4fa3ff",ac:"#4ade80",x:2.3,col:0x4fa3ff,mk:"molA",ak:"anA",dc:"#4fa3ff"},
+B:{name:"حمض الهيدروفلوريك",f:"HF",cls:"weak",st:"حمض ضعيف — تأين جزئي واتزان كيميائي",rx:"HF + H₂O ⇌ H₃O⁺ + F⁻",type:"تأين جزئي",an:"F⁻",lam:55.4,Ka:6.8e-4,mc:"#ffd166",ac:"#c084fc",x:-2.3,col:0xffd166,mk:"molB",ak:"anB",dc:"#ffb454"}};
+const KEYS=["A","B"],PER=200,VOL=0.1,NAV=6.022e23,LH=349.8;
+const conc={A:0.5,B:0.5};
+function calc(k,C){const K=D[k].Ka,x=(-K+Math.sqrt(K*K+4*K*C))/2;return{x:x,al:x/C,pH:-Math.log10(x)};}
+function kap(k,C){const x=calc(k,C).x;return (LH+D[k].lam)*x/(1+0.25*Math.sqrt(x));}
+function sci(n){const e=Math.floor(Math.log10(n)),s="⁰¹²³⁴⁵⁶⁷⁸⁹";return (n/Math.pow(10,e)).toFixed(2)+"×10"+String(e).split("").map(c=>c==="-"?"⁻":s[+c]).join("");}
+function pct(a){return a>0.9999?"≈99.99%":(a*100).toFixed(a<0.1?2:1)+"%";}
+
+// cards
+$("cards").innerHTML=KEYS.map(k=>{const d=D[k];return `<section class="card"><h2>${d.name} <span class="ltr">${d.f}</span></h2><span class="tag ${d.cls}">${d.st}</span>
+<div class="eq">${d.rx}</div><div class="unit">المقصود: التأين في الماء — نوع التفاعل: ${d.type}</div>
+<div class="big"><span id="c_${k}"></span> <span class="unit">mol/L</span></div>
+<input type="range" id="s_${k}" min="0.05" max="1" step="0.01" aria-label="تركيز ${d.f}">
+<div class="g"><div><small>درجة التأين α</small><b id="al_${k}"></b></div><div><small>النسبة المئوية = α × 100</small><b id="pc_${k}"></b></div><div><small>pH</small><b id="ph_${k}"></b></div><div><small>التوصيلية (mS/cm)</small><b id="kp_${k}"></b></div></div>
+<div class="cnt" style="margin-top:8px"><span>سطوع المصباح (من التوصيلية)</span><b id="br_${k}"></b></div>
+<div class="cnt"><span><i class="dot" style="background:${d.mc}"></i>جزيئات ${d.f} غير المتأينة</span><b id="m_${k}"></b></div>
+<div class="cnt"><span><i class="dot" style="background:#ff5d6c"></i>أيونات H₃O⁺</span><b id="h_${k}"></b></div>
+<div class="cnt"><span><i class="dot" style="background:${d.ac}"></i>أيونات <span class="ltr">${d.an}</span></span><b id="n_${k}"></b></div></section>`;}).join("");
+
+// three
+const stage=$("stage"),renderer=new THREE.WebGLRenderer({antialias:true});
+renderer.setPixelRatio(Math.min(devicePixelRatio,2));renderer.shadowMap.enabled=true;renderer.outputEncoding=THREE.sRGBEncoding;stage.appendChild(renderer.domElement);
+const scene=new THREE.Scene();scene.background=new THREE.Color(0x0a1020);scene.fog=new THREE.Fog(0x0a1020,14,30);
+const camera=new THREE.PerspectiveCamera(45,1,0.1,60),HOME=new THREE.Vector3(0,4.4,12.8);camera.position.copy(HOME);
+const ctl=new THREE.OrbitControls(camera,renderer.domElement);ctl.target.set(0,1.8,0);ctl.enableDamping=true;ctl.minDistance=3;ctl.maxDistance=18;ctl.maxPolarAngle=Math.PI*0.49;ctl.autoRotate=true;ctl.autoRotateSpeed=0.6;
+scene.add(new THREE.HemisphereLight(0xbcd4ff,0x1a2238,0.7));
+const key=new THREE.DirectionalLight(0xffffff,0.9);key.position.set(4,8,5);key.castShadow=true;key.shadow.mapSize.set(1024,1024);Object.assign(key.shadow.camera,{left:-7,right:7,top:7,bottom:-7});scene.add(key);
+const rim=new THREE.PointLight(0x6aa8ff,0.8,20);rim.position.set(-5,3,-4);scene.add(rim);
+const tbl=new THREE.Mesh(new THREE.BoxGeometry(12,0.3,4.8),new THREE.MeshStandardMaterial({color:0x2b3550,roughness:0.35,metalness:0.2}));tbl.position.y=-0.15;tbl.receiveShadow=true;scene.add(tbl);
+
+function mt(W,H){const c=document.createElement("canvas");c.width=W;c.height=H;const g=c.getContext("2d"),t=new THREE.CanvasTexture(c);
+return{t:t,draw:function(txt,col,fs){g.clearRect(0,0,W,H);g.fillStyle="rgba(10,16,32,.88)";g.fillRect(0,0,W,H);g.strokeStyle=col;g.lineWidth=6;g.strokeRect(3,3,W-6,H-6);g.fillStyle="#fff";g.font="bold "+fs+"px Arial, Tahoma";g.textAlign="center";g.textBaseline="middle";g.fillText(txt,W/2,H/2+3);t.needsUpdate=true;}};}
+function spr(o,w,h){const s=new THREE.Sprite(new THREE.SpriteMaterial({map:o.t,transparent:true}));s.scale.set(w,h,1);return s;}
+
+const R=1.05,H=2.6,WH=1.9,EX=0.82;
+const sg=new THREE.SphereGeometry(1,10,8),SZ={m:0.125,h:0.065,a:0.085};
+const COL={molA:0x4fa3ff,molB:0xffd166,hyd:0xff5d6c,anA:0x4ade80,anB:0xc084fc},mats={};
+for(const c in COL)mats[c]=new THREE.MeshStandardMaterial({color:COL[c],roughness:0.35,emissive:COL[c],emissiveIntensity:0.25});
+const glassM=new THREE.MeshPhysicalMaterial({color:0xcfe8ff,transparent:true,opacity:0.18,roughness:0.05,side:THREE.DoubleSide,depthWrite:false});
+const B={};
+function mesh(g,m,x,y,z){const o=new THREE.Mesh(g,m);o.position.set(x,y,z);return o;}
+KEYS.forEach(k=>{const d=D[k],g=new THREE.Group();g.position.x=d.x;scene.add(g);
+g.add(mesh(new THREE.CylinderGeometry(R+0.05,R+0.05,H,48,1,true),glassM,0,H/2,0));
+g.add(mesh(new THREE.CylinderGeometry(R+0.05,R+0.05,0.08,48),new THREE.MeshPhysicalMaterial({color:0xcfe8ff,transparent:true,opacity:0.5}),0,0.04,0));
+const tor=mesh(new THREE.TorusGeometry(R+0.05,0.03,8,48),new THREE.MeshStandardMaterial({color:0xdff0ff}),0,H,0);tor.rotation.x=Math.PI/2;g.add(tor);
+g.add(mesh(new THREE.CylinderGeometry(R,R,WH,48),new THREE.MeshPhysicalMaterial({color:d.col,transparent:true,opacity:0.2,roughness:0.1,depthWrite:false}),0,0.08+WH/2,0));
+// electrodes: cathode (-) at -x, anode (+) at +x
+[[-EX,0x5b7cff,"−"],[EX,0xff6b6b,"+"]].forEach(e=>{g.add(mesh(new THREE.BoxGeometry(0.06,1.6,0.55),new THREE.MeshStandardMaterial({color:e[1],metalness:0.8,roughness:0.3}),e[0],1.2,0));
+g.add(mesh(new THREE.CylinderGeometry(0.03,0.03,1.6,8),new THREE.MeshStandardMaterial({color:e[1],metalness:0.8}),e[0],2.8,0));
+const t=mt(96,96);t.draw(e[2],"#"+new THREE.Color(e[1]).getHexString(),64);const s=spr(t,0.4,0.4);s.position.set(e[0],H+0.35,0.3);g.add(s);});
+const lt=mt(512,128);lt.draw(d.f,"#"+new THREE.Color(d.col).getHexString(),84);const ls=spr(lt,1.9,0.48);ls.position.set(0,H+1.9,0);g.add(ls);
+const et=mt(768,120);et.draw(d.rx,"#"+new THREE.Color(d.col).getHexString(),50);
+const ep=mesh(new THREE.PlaneGeometry(4.3,0.67),new THREE.MeshBasicMaterial({map:et.t,transparent:true}),d.x,0.03,2.05);ep.rotation.x=-1.35;scene.add(ep);
+// lamp + display beside beaker
+const lx=d.x>0?4.5:-4.5,bx=d.x>0?5.45:-5.45,lg=new THREE.Group();lg.position.x=lx;scene.add(lg);
+lg.add(mesh(new THREE.CylinderGeometry(0.35,0.45,0.2,24),new THREE.MeshStandardMaterial({color:0x444c66}),0,0.1,0));
+lg.add(mesh(new THREE.CylinderGeometry(0.08,0.08,1.2,12),new THREE.MeshStandardMaterial({color:0x666f8c}),0,0.7,0));
+const bm=new THREE.MeshStandardMaterial({color:0x8a8f9e,emissive:0xffd45a,emissiveIntensity:0,transparent:true,opacity:0.92,roughness:0.2});
+lg.add(mesh(new THREE.SphereGeometry(0.42,24,16),bm,0,1.6,0));
+const halo=mesh(new THREE.SphereGeometry(0.75,20,14),new THREE.MeshBasicMaterial({color:0xffd45a,transparent:true,opacity:0,blending:THREE.AdditiveBlending,depthWrite:false}),0,1.6,0);lg.add(halo);
+const pl=new THREE.PointLight(0xffd45a,0,12);pl.position.set(0,1.9,0);lg.add(pl);
+const dt=mt(512,128);const ds=spr(dt,2.3,0.58);ds.position.set(0,0.5,1.3);lg.add(ds);
+scene.add(mesh(new THREE.BoxGeometry(0.55,0.5,0.55),new THREE.MeshStandardMaterial({color:0xc9a227,metalness:0.6,roughness:0.4}),bx,0.25,0));
+const bt=mt(192,64);bt.draw("بطارية","#c9a227",34);const bs=spr(bt,0.9,0.3);bs.position.set(bx,0.85,0);scene.add(bs);
+const tube=(pts,c)=>scene.add(new THREE.Mesh(new THREE.TubeGeometry(new THREE.CatmullRomCurve3(pts.map(p=>new THREE.Vector3(p[0],p[1],p[2])),false,"catmullrom",0),64,0.025,6,false),new THREE.MeshStandardMaterial({color:c,metalness:0.5,roughness:0.4})));
+tube([[d.x-EX,3.6,0],[d.x-EX,4.1,0],[lx,4.1,0],[lx,2.03,0]],0x5b7cff);
+tube([[d.x+EX,3.6,0],[d.x+EX,3.75,0],[bx,3.75,0],[bx,0.5,0]],0xff6b6b);
+tube([[bx,0.28,0],[lx,0.28,0]],0xc9a227);
+B[k]={g:g,list:[],bm:bm,halo:halo,pl:pl,dt:dt,cur:0,tgt:0};});
+
+function addP(b,t,mat,size,sp,mu){const m=new THREE.Mesh(sg,mats[mat]);m.scale.setScalar(size);
+const a=Math.random()*6.283,r=Math.sqrt(Math.random())*(R-0.15);m.position.set(Math.cos(a)*r,0.2+Math.random()*(WH-0.3),Math.sin(a)*r);b.g.add(m);
+b.list.push({m:m,t:t,s:sp,mu:mu,v:new THREE.Vector3(Math.random()-.5,Math.random()-.5,Math.random()-.5).normalize().multiplyScalar(sp)});}
+function rebuild(k){const b=B[k],d=D[k];b.list.forEach(p=>b.g.remove(p.m));b.list=[];
+const C=conc[k],r=calc(k,C),N=Math.round(C*PER),ion=Math.min(N,Math.round(r.al*N)),mol=N-ion;
+for(let i=0;i<mol;i++)addP(b,"m",d.mk,SZ.m,0.35,0);
+for(let i=0;i<ion;i++){addP(b,"c","hyd",SZ.h,0.7,1.2);addP(b,"a",d.ak,SZ.a,0.55,1.2*d.lam/LH);}
+return{ion:ion,mol:mol,r:r};}
+
+// UI
+let running=true,paused=false;
+const ROWS=[["الصيغة الكيميائية",k=>D[k].name+" ("+D[k].f+")"],["التركيز",k=>conc[k].toFixed(2)+" mol/L"],["قوة الحمض",k=>D[k].cls==="strong"?"قوي":"ضعيف"],["المعادلة",k=>'<span class="ltr">'+D[k].rx+"</span>"],["نوع التفاعل",k=>D[k].type],["درجة التأين α",k=>calc(k,conc[k]).al>0.9999?"≈ 1.0000":calc(k,conc[k]).al.toFixed(4)],["نسبة التأين",k=>pct(calc(k,conc[k]).al)],["جزيئات غير متأينة (عينة)",k=>S[k].mol],["أيونات موجبة H₃O⁺ (عينة)",k=>S[k].ion],["أيونات سالبة (عينة)",k=>S[k].ion+" "+D[k].an],["pH",k=>calc(k,conc[k]).pH.toFixed(2)],["التوصيلية",k=>kap(k,conc[k]).toFixed(1)+" mS/cm"],["سطوع المصباح",k=>Math.round(B[k].tgt*100)+"%"],["أيونات H₃O⁺ الفعلية في 100 mL",k=>sci(calc(k,conc[k]).x*VOL*NAV)]];
+const S={A:null,B:null};
+const BR=Math.log10(1+350);
+function lamp(k){const b=B[k],kv=kap(k,conc[k]);b.tgt=running?Math.min(1,Math.log10(1+kv)/BR):0;
+b.dt.draw(running?"κ = "+kv.toFixed(1)+" mS/cm":"OFF · κ = "+kv.toFixed(1),running?"#ffd45a":"#667",running?54:46);
+$("br_"+k).textContent=Math.round(b.tgt*100)+"%";}
+function glow(b,dt){b.cur+=(b.tgt-b.cur)*Math.min(1,dt*4);const c=b.cur;b.bm.emissiveIntensity=2.6*c;b.bm.color.setRGB(0.55+0.45*c,0.55+0.4*c,0.6-0.2*c);b.halo.material.opacity=0.55*c;b.halo.scale.setScalar(0.8+0.5*c);b.pl.intensity=3.5*c;}
+function upd(k,rb){const C=conc[k],r=calc(k,C);if(rb||!S[k])S[k]=rebuild(k);
+$("s_"+k).value=C;$("c_"+k).textContent=C.toFixed(2);$("al_"+k).textContent=r.al>0.9999?"≈ 1.0000":r.al.toFixed(4);$("pc_"+k).textContent=pct(r.al);$("ph_"+k).textContent=r.pH.toFixed(2);$("kp_"+k).textContent=kap(k,C).toFixed(1);
+$("m_"+k).textContent=S[k].mol;$("h_"+k).textContent=S[k].ion;$("n_"+k).textContent=S[k].ion;lamp(k);}
+function curve(cv,fn,ymax,sh){const dpr=devicePixelRatio||1,w=cv.clientWidth,h=cv.clientHeight;cv.width=w*dpr;cv.height=h*dpr;const g=cv.getContext("2d");g.scale(dpr,dpr);
+const L=44,Bt=22,T=8,Rt=10,pw=w-L-Rt,ph=h-T-Bt,X=c=>L+pw*(c-0.05)/0.95,Y=v=>T+ph*(1-v/ymax);
+g.font="11px Arial";g.fillStyle="#93a0bd";g.strokeStyle="#26324d";g.lineWidth=1;
+for(let i=0;i<=4;i++){const y=T+ph*i/4;g.beginPath();g.moveTo(L,y);g.lineTo(w-Rt,y);g.stroke();g.textAlign="right";g.fillText((ymax*(1-i/4)).toFixed(sh),L-5,y+4);}
+[0.05,0.25,0.5,0.75,1].forEach(c=>{g.textAlign="center";g.fillText(c,X(c),h-6);});
+KEYS.forEach(k=>{g.strokeStyle=D[k].dc;g.lineWidth=2.5;g.beginPath();for(let c=0.05;c<=1.0001;c+=0.01){const x=X(c),y=Y(fn(k,c));c<0.051?g.moveTo(x,y):g.lineTo(x,y);}g.stroke();
+g.fillStyle=D[k].dc;g.beginPath();g.arc(X(conc[k]),Y(fn(k,conc[k])),6,0,6.283);g.fill();});}
+function charts(){curve($("ch1"),(k,c)=>calc(k,c).al*100,100,0);curve($("ch2"),(k,c)=>kap(k,c),Math.ceil(kap("A",1)*1.05/10)*10,0);}
+function table(){$("tb").innerHTML="<tr><th></th><th>"+D.A.f+"</th><th>"+D.B.f+"</th></tr>"+ROWS.map(r=>"<tr><td>"+r[0]+"</td><td>"+r[1]("A")+"</td><td>"+r[1]("B")+"</td></tr>").join("");}
+function all(rb){KEYS.forEach(k=>upd(k,rb));table();charts();}
+function setC(k,v){conc[k]=Math.min(1,Math.max(0.05,Math.round(v*100)/100));upd(k,true);table();charts();}
+KEYS.forEach(k=>$("s_"+k).addEventListener("input",e=>setC(k,+e.target.value)));
+$("uni").onclick=()=>setC("B",conc.A);
+$("go").onclick=()=>{running=!running;$("go").textContent=running?"إيقاف التجربة":"بدء التجربة";KEYS.forEach(lamp);table();};
+$("rot").onclick=()=>{ctl.autoRotate=!ctl.autoRotate;$("rot").textContent="تدوير تلقائي: "+(ctl.autoRotate?"يعمل":"متوقف");};
+$("pz").onclick=()=>{paused=!paused;$("pz").textContent=paused?"تشغيل الحركة":"إيقاف الحركة";};
+function zoom(f){const v=camera.position.clone().sub(ctl.target).multiplyScalar(f),L=v.length();if(L<3||L>18)return;camera.position.copy(ctl.target).add(v);}
+$("zi").onclick=()=>zoom(0.85);$("zo").onclick=()=>zoom(1.18);
+$("rs").onclick=()=>{conc.A=0.5;conc.B=0.5;running=true;paused=false;ctl.autoRotate=true;$("go").textContent="إيقاف التجربة";$("pz").textContent="إيقاف الحركة";$("rot").textContent="تدوير تلقائي: يعمل";camera.position.copy(HOME);ctl.target.set(0,1.8,0);ctl.update();all(true);};
+function resize(){const w=stage.clientWidth,h=stage.clientHeight;renderer.setSize(w,h);camera.aspect=w/h;camera.updateProjectionMatrix();charts();}
+addEventListener("resize",resize);
+
+function step(b,dt){const top=0.08+WH-0.1,lo=0.2,lim=R-0.12;
+b.list.forEach(p=>{const q=p.m.position,v=p.v;
+v.x+=(Math.random()-.5)*0.6*dt;v.y+=(Math.random()-.5)*0.6*dt;v.z+=(Math.random()-.5)*0.6*dt;v.setLength(p.s);q.addScaledVector(v,dt*2);
+if(running&&p.t!=="m"){const dir=p.t==="c"?-1:1;q.x+=dir*p.mu*dt;
+if(p.t==="c"&&q.x<-EX+0.04){q.x=EX-0.05;q.y=0.3+Math.random()*(WH-0.5);q.z=(Math.random()-.5)*0.6;}
+if(p.t==="a"&&q.x>EX-0.04){q.x=-EX+0.05;q.y=0.3+Math.random()*(WH-0.5);q.z=(Math.random()-.5)*0.6;}}
+const r=Math.hypot(q.x,q.z);if(r>lim){const nx=q.x/r,nz=q.z/r,d=v.x*nx+v.z*nz;if(d>0){v.x-=2*d*nx;v.z-=2*d*nz;}q.x=nx*lim;q.z=nz*lim;}
+if(q.y>top){q.y=top;v.y=-Math.abs(v.y);}if(q.y<lo){q.y=lo;v.y=Math.abs(v.y);}});}
+const clk=new THREE.Clock();
+function loop(){requestAnimationFrame(loop);const dt=Math.min(clk.getDelta(),0.05);glow(B.A,dt);glow(B.B,dt);if(!paused){step(B.A,dt);step(B.B,dt);}ctl.update();renderer.render(scene,camera);}
+all(true);resize();loop();
+})();
+</script>
+<script>
+/* إضافة pH وpOH: تقرأ تركيز المحاكاة دون تعديل أي كود أصلي */
+(function(){
+var $=function(i){return document.getElementById(i)},Kw=1e-14,SUP="⁰¹²³⁴⁵⁶⁷⁸⁹";
+var M={A:{t:"wa",K:1e4,s:"s_A",n:"HNO₃"},B:{t:"wa",K:6.8e-4,s:"s_B",n:"HF"},hcl:{t:"sa"},ace:{t:"wa",K:1.8e-5},naoh:{t:"sb"},h2o:{t:"w"}};
+function sci(n){var p=n.toExponential(2).split("e"),e=String(+p[1]).split("").map(function(c){return c==="-"?"⁻":SUP[+c]}).join("");return p[0]+"×10"+e}
+function solve(K,C){var lo=-14,hi=2,m,h;for(var i=0;i<90;i++){m=(lo+hi)/2;h=Math.pow(10,m);(h-K*C/(K+h)-Kw/h>0)?hi=m:lo=m}return Math.pow(10,(lo+hi)/2)}
+function pos(v){return Math.max(0,Math.min(14,v))/14*100+"%"}
+function run(){
+ var k=$("phx-sel").value,m=M[k],C,E=$("phx-e"),sim=!!m.s,h,o,al=null;
+ E.textContent="";
+ $("phx-c").disabled=sim||m.t==="w";
+ if(sim){C=parseFloat($("s_"+k.replace(/^s_/,"")).value);$("phx-c").value=C;
+  $("phx-src").textContent="التركيز مأخوذ من شريط تركيز "+m.n+" في المحاكاة أدناه؛ غيّره هناك ويتحدث هذا القسم تلقائيًا."}
+ else if(m.t==="w"){$("phx-c").value="";$("phx-src").textContent="الماء النقي: لا يعتمد على التركيز."}
+ else{C=parseFloat($("phx-c").value);$("phx-src").textContent="الحساب يعتمد على التركيز المدخل هنا.";
+  if(!(C>=1e-6&&C<=1)){E.textContent="أدخل تركيزًا بين 0.000001 و1 mol/L.";return}}
+ if(m.t==="w"){h=o=1e-7}
+ else if(m.t==="sa"){h=(C+Math.sqrt(C*C+4*Kw))/2;o=Kw/h;al=1}
+ else if(m.t==="sb"){o=(C+Math.sqrt(C*C+4*Kw))/2;h=Kw/o;al=1}
+ else{h=solve(m.K,C);o=Kw/h;al=m.K*C/(m.K+h)/C}
+ var pH=-Math.log10(h),pO=14-pH,neu=Math.abs(pH-7)<0.005,acid=pH<7;
+ $("phx-vh").textContent=pH.toFixed(2);$("phx-vo").textContent=pO.toFixed(2);
+ $("phx-h").textContent=sci(h);$("phx-oh").textContent=sci(o);
+ $("phx-mh").style.left=pos(pH);$("phx-mo").style.left=pos(pO);
+ $("phx-mh").setAttribute("data-v",pH.toFixed(2));$("phx-mo").setAttribute("data-v",pO.toFixed(2));
+ var kd=neu?"متعادل":acid?"حمضي":"قاعدي";
+ $("phx-dh").innerHTML='<span class="ltr">pH = '+pH.toFixed(2)+'</span> '+(neu?"≈ 7: متعادل":acid?"أقل من 7: حمضي":"أكبر من 7: قاعدي");
+ $("phx-do").innerHTML='<span class="ltr">pOH = '+pO.toFixed(2)+'</span> '+(neu?"≈ 7: متعادل":pO<7?"أقل من 7: قاعدي":"أكبر من 7: حمضي");
+ var t=$("phx-k");t.textContent=kd;t.className="phx-t "+(neu?"phx-tn":acid?"phx-ta":"phx-tb");
+ $("phx-n").innerHTML=al===null?"":'نسبة التأين ≈ <span class="ltr">'+(al>0.9999?"99.99":(al*100).toPrecision(3))+'%</span>';
+}
+$("phx-sel").addEventListener("change",run);$("phx-c").addEventListener("input",run);
+if(window.MutationObserver)["c_A","c_B"].forEach(function(id){var e=$(id);if(e)new MutationObserver(run).observe(e,{childList:true,characterData:true,subtree:true})});
+["s_A","s_B"].forEach(function(id){var e=$(id);if(e)e.addEventListener("input",run)});
+run();
+})();
+</script>
+
+
+<script>
+(function(){
+var $=function(i){return document.getElementById(i)},Kw=1e-14;
+// ===== 1) المقدمة =====
+function info(box,v){var p=v.split('|');box.innerHTML='<strong>'+p[0]+'</strong> — '+p[1]}
+document.querySelectorAll('#viewNeut [data-info]').forEach(function(e){e.addEventListener('click',function(){info(e.closest('#s5')?$('info2'):$('info'),e.dataset.info)})});
+var sh={a:0,b:0,m:0};
+function ions(){var m=sh.m;
+$('iH').classList.toggle('hid',!sh.a||m);$('iCl').classList.toggle('hid',!sh.a);
+$('iNa').classList.toggle('hid',!sh.b);$('iOH').classList.toggle('hid',!sh.b||m);
+$('iW').classList.toggle('hid',!m)}
+$('bAcid').onclick=function(){sh.a=1;sh.m=0;ions();info($('info'),'HCl|حمض قوي: يتأين كليًا HCl → H⁺ + Cl⁻')};
+$('bBase').onclick=function(){sh.b=1;sh.m=0;ions();info($('info'),'NaOH|قاعدة قوية: تتفكك كليًا NaOH → Na⁺ + OH⁻')};
+$('bMix').onclick=function(){if(!(sh.a&&sh.b)){$('hint').textContent='اضغطي على الحمض والقاعدة أولًا.';return}sh.m=1;ions();$('hint').textContent='اتحد H⁺ مع OH⁻ فتكوّن H₂O، وبقي Na⁺ وCl⁻ في المحلول (NaCl).'};
+$('bRst1').onclick=function(){sh={a:0,b:0,m:0};ions();$('hint').textContent='اضغطي على الحمض أو القاعدة لترين أيوناتهما، ثم اضغطي «امزج».'};
+// ===== 5) الأيونات المتفرجة =====
+var spd=0;$('bSpec').onclick=function(){spd=!spd;document.querySelectorAll('#viewNeut .spc').forEach(function(e){e.classList.toggle('sx',spd)});$('netEq').style.opacity=spd?1:.25;this.textContent=spd?'إظهار الأيونات المتفرجة':'احذفي الأيونات المتفرجة'};
+// ===== نموذج المعايرة =====
+var ACIDS=[{n:'HCl',s:1},{n:'HNO₃',s:1},{n:'CH₃COOH',s:0,K:1.8e-5}],BASES=[{n:'NaOH',s:1},{n:'KOH',s:1},{n:'NH₃',s:0,K:1.8e-5}];
+var IND=[{n:'الفينولفثالين',lo:8.2,hi:10,c1:[225,240,250],c2:[230,60,150],t:['عديم اللون','وردي']},
+{n:'تباع الشمس',lo:5,hi:8,c1:[220,50,50],c2:[60,90,220],t:['أحمر','أزرق']},
+{n:'الميثيل البرتقالي',lo:3.1,hi:4.4,c1:[230,50,40],c2:[250,200,40],t:['أحمر','أصفر']}];
+var S={ai:0,bi:0,ma:.1,mb:.1,va:25,vb:0,ind:0,open:0,tm:null};
+function ph(V){var Vt=S.va+V,Ca=S.ma*S.va/Vt,Cb=S.mb*V/Vt,A=ACIDS[S.ai],B=BASES[S.bi],lo=-1,hi=15,m,h,a,b,f;
+for(var i=0;i<60;i++){m=(lo+hi)/2;h=Math.pow(10,-m);a=A.s?Ca:Ca*A.K/(A.K+h);b=B.s?Cb:Cb*h/(h+Kw/B.K);f=h+b-Kw/h-a;if(f>0)lo=m;else hi=m}return(lo+hi)/2}
+function veq(){return S.ma*S.va/S.mb}
+function mix(a,b,t){return a.map(function(x,i){return Math.round(x+(b[i]-x)*t)})}
+function colAt(p){var d=IND[S.ind],t=Math.max(0,Math.min(1,(p-d.lo)/(d.hi-d.lo))),c=mix(d.c1,d.c2,t),n=t<.15?d.t[0]:t>.85?d.t[1]:'لون انتقالي بين '+d.t[0]+' و'+d.t[1];return{c:'rgb('+c+')',n:n}}
+function drop(){var g=$('drops'),c=document.createElementNS('http://www.w3.org/2000/svg','circle');c.setAttribute('cx',150);c.setAttribute('cy',266);c.setAttribute('r',3.5);c.setAttribute('fill','#ffb86b');c.setAttribute('class','drop');g.appendChild(c);setTimeout(function(){g.removeChild(c)},460)}
+function add(v){var cap=50;S.vb=Math.min(cap,Math.round((S.vb+v)*100)/100);if(S.vb>=cap)stop();draw()}
+function stop(){S.open=0;clearInterval(S.tm);$('bValve').textContent='افتح الصمام';$('bValve').classList.remove('on');$('vlv').style.transform='rotate(0deg)'}
+function start(){S.open=1;$('bValve').textContent='أغلقي الصمام';$('bValve').classList.add('on');$('vlv').style.transform='rotate(90deg)';clearInterval(S.tm);
+var f=$('mode').value=='f';S.tm=setInterval(function(){if(!f)drop();add(f?.25:.05)},f?100:350)}
+$('bValve').onclick=function(){S.open?stop():start()};
+$('mode').onchange=function(){if(S.open){stop();start()}};
+$('bDrop').onclick=function(){drop();add(.05)};
+$('bAdd').onclick=function(){var v=+$('step').value,n=Math.min(6,Math.ceil(v)),i=0;for(;i<n;i++)setTimeout(drop,i*120);add(v)};
+$('step').oninput=function(){$('stepL').textContent=(+this.value).toFixed(1)};
+function reset(){stop();S.vb=0;draw()}$('bRst2').onclick=reset;
+// ===== عناصر التحكم =====
+function ctl(){S.ai=+$('acid').value;S.bi=+$('base').value;S.ma=+$('ma').value;S.mb=+$('mb').value;S.va=+$('va').value;
+$('maL').textContent=S.ma.toFixed(2);$('mbL').textContent=S.mb.toFixed(2);$('vaL').textContent=S.va;
+var n=S.ma*S.va/1000,v=veq();$('rel').innerHTML='n(حمض) = M×V = '+S.ma.toFixed(2)+' × '+(S.va/1000).toFixed(3)+' = <strong>'+n.toFixed(4)+' mol</strong><br>V(قاعدة عند التكافؤ) = n ÷ M_b = <strong>'+v.toFixed(2)+' mL</strong>'+(v>50?'<br><span style="color:var(--bad)">يتجاوز سعة السحاحة (50 mL): ارفعي تركيز القاعدة أو قلّلي الحمض.</span>':'');reset()}
+['acid','base','ma','mb','va'].forEach(function(i){$(i).oninput=ctl;$(i).onchange=ctl});
+// ===== الكواشف =====
+IND.forEach(function(d,i){var b=document.createElement('button');b.textContent=d.n;b.onclick=function(){S.ind=i;draw()};b.dataset.i=i;$('inds').appendChild(b);
+var c=document.createElement('div');c.className='info';c.innerHTML='<strong>'+d.n+'</strong><br>نطاق التغير: pH '+d.lo+' – '+d.hi+'<br>'+d.t[0]+' ← '+d.t[1]+'<div style="height:12px;border-radius:6px;margin-top:6px;background:linear-gradient(90deg,rgb('+d.c1+'),rgb('+d.c2+'))"></div>';$('indTbl').appendChild(c)});
+// ===== الرسم =====
+function curve(){var xm=50,pts=[],i;for(i=0;i<=200;i++)pts.push(ph(i*xm/200));return pts}
+function chart(p){var cv=$('cv'),x=cv.getContext('2d'),W=cv.width,H=cv.height,L=50,R=14,T=14,B=36,pw=W-L-R,pH=H-T-B,pts=curve(),xm=50,d=IND[S.ind];
+function X(v){return L+v/xm*pw}function Y(p){return T+(14-Math.max(0,Math.min(14,p)))/14*pH}
+x.clearRect(0,0,W,H);x.font='13px Tahoma';x.fillStyle='#9db8d1';x.strokeStyle='#27517a';x.lineWidth=1;
+for(var k=0;k<=14;k+=2){x.beginPath();x.moveTo(L,Y(k));x.lineTo(W-R,Y(k));x.stroke();x.fillText(k,24,Y(k)+4)}
+for(k=0;k<=50;k+=10){x.fillText(k,X(k)-6,H-18)}x.fillText('V (mL)',W-60,H-3);x.fillText('pH',4,T+8);
+x.fillStyle='rgba(255,255,255,.08)';x.fillRect(L,Y(d.hi),pw,Y(d.lo)-Y(d.hi));
+var sl=[],mx=0,i;for(i=1;i<pts.length;i++){sl[i]=Math.abs(pts[i]-pts[i-1]);mx=Math.max(mx,sl[i])}
+x.fillStyle='rgba(61,220,151,.18)';for(i=1;i<pts.length;i++)if(sl[i]>mx*.15)x.fillRect(X((i-1)*xm/200),T,pw/200+1,pH);
+x.strokeStyle='#4da3ff';x.lineWidth=2.5;x.beginPath();pts.forEach(function(q,i){var a=X(i*xm/200),b=Y(q);i?x.lineTo(a,b):x.moveTo(a,b)});x.stroke();
+var e=veq();if(e<=xm){x.setLineDash([6,5]);x.strokeStyle='#3ddc97';x.lineWidth=1.5;x.beginPath();x.moveTo(X(e),T);x.lineTo(X(e),T+pH);x.stroke();x.setLineDash([])}
+x.fillStyle='#ff9f43';x.beginPath();x.arc(X(S.vb),Y(p),7,0,7);x.fill();x.strokeStyle='#fff';x.lineWidth=2;x.stroke()}
+function draw(){var p=ph(S.vb),c=colAt(p),V=S.vb,e=veq(),Vt=S.va+V;
+$('bl').setAttribute('y',30+V*4);$('bl').setAttribute('height',200-V*4);
+var h=40+40*Vt/(S.va+50);$('fl').setAttribute('y',408-h);$('fl').setAttribute('height',h);$('fl').style.fill=c.c;$('dc').style.fill=colAt(7).c;
+$('rV').textContent=V.toFixed(2)+' mL';$('rP').textContent=p.toFixed(2);$('rC').textContent=c.n;
+$('rS').textContent=p<6.9?'حمضي':p>7.1?'قاعدي':'متعادل';
+var b=$('bdg');b.className='badge';
+if(Math.abs(V-e)<.026){b.classList.add('eq1');b.textContent='✓ نقطة التكافؤ عند '+e.toFixed(2)+' mL — pH = '+p.toFixed(2)}
+else if(V>e){b.classList.add('over');b.textContent='تجاوزتِ نقطة التكافؤ ('+e.toFixed(2)+' mL): المحلول فيه زيادة من القاعدة'}
+else b.textContent='لم تصلي إلى التكافؤ بعد';
+document.querySelectorAll('#inds button').forEach(function(x){x.classList.toggle('on',+x.dataset.i==S.ind)});
+chart(p)}
+// ===== 6) الآلة الحاسبة =====
+function calc(){var u=$('unk').value,g=function(i){return parseFloat($(i).value)},na=g('na')||1,nb=g('nb')||1,v={ma:g('cMa'),va:g('cVa'),mb:g('cMb'),vb:g('cVb')},
+ids={ma:'cMa',va:'cVa',mb:'cMb',vb:'cVb'},k,r,s='';
+for(k in ids)$(ids[k]).disabled=(k==u);
+// الصيغة: Ma·Va / na = Mb·Vb / nb
+if(u=='vb')r=v.ma*v.va*nb/(na*v.mb);if(u=='mb')r=v.ma*v.va*nb/(na*v.vb);if(u=='va')r=v.mb*v.vb*na/(nb*v.ma);if(u=='ma')r=v.mb*v.vb*na/(nb*v.va);
+if(!isFinite(r))r=NaN;var vv=Object.assign({},v);vv[u]=r;
+s+='<p><b>القانون:</b> (M_a × V_a) ÷ n_a = (M_b × V_b) ÷ n_b</p>';
+if(u!='ma'&&u!='va')s+='<p>مولات الحمض = '+v.ma+' × '+(v.va/1000)+' = '+(v.ma*v.va/1000).toFixed(5)+' mol</p>';
+s+='<p>بالتعويض: ('+(u=='ma'?'؟':vv.ma)+' × '+(u=='va'?'؟':vv.va)+') ÷ '+na+' = ('+(u=='mb'?'؟':vv.mb)+' × '+(u=='vb'?'؟':vv.vb)+') ÷ '+nb+'</p>';
+var nm={vb:'V_b',mb:'M_b',va:'V_a',ma:'M_a'},un=(u=='vb'||u=='va')?'mL':'mol/L';
+s+='<p class="res">'+nm[u]+' = '+(isNaN(r)?'—':r.toFixed(4))+' '+un+'</p>';
+if(!isNaN(r)){s+='<p>تحقق: مولات الحمض ÷ n_a = '+(vv.ma*vv.va/1000/na).toFixed(5)+' ، مولات القاعدة ÷ n_b = '+(vv.mb*vv.vb/1000/nb).toFixed(5)+'</p>'}
+$('calc').innerHTML=s}
+['unk','na','nb','cMa','cVa','cMb','cVb'].forEach(function(i){$(i).oninput=calc;$(i).onchange=calc});
+ions();ctl();calc();
+})();
+</script>
+<script>
+(function(){var a=document.getElementById("viewAcids"),n=document.getElementById("viewNeut"),ba=document.getElementById("ntTabA"),bn=document.getElementById("ntTabN");
+function show(x){a.hidden=!x;n.hidden=x;ba.classList.toggle("pri",x);bn.classList.toggle("pri",!x);try{history.replaceState(null,"",x?location.pathname:"#neutralization")}catch(e){}setTimeout(function(){window.dispatchEvent(new Event("resize"))},30)}
+ba.onclick=function(){show(true)};bn.onclick=function(){show(false)};if(location.hash=="#neutralization")show(false);})();
+</script>
+</body></html>
